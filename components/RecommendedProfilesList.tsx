@@ -1,4 +1,5 @@
-import { StyleSheet, FlatList, View, Text } from "react-native";
+import { FlatList } from "react-native";
+import { Div, Text, Avatar } from "react-native-magnus";
 import { A } from "@expo/html-elements";
 import { useQuery } from "@apollo/client";
 import { recommendProfiles } from "../queries/recommended-profiles";
@@ -17,35 +18,42 @@ export const RecommendedProfilesList = () => {
     <FlatList
       data={profiles}
       renderItem={({ item: profile }) => {
-        console.log(`Profile ${profile.id}:`, profile);
         return (
-          <View>
-            <Text style={styles.title}>{profile.name}</Text>
-            <Text>{profile.bio}</Text>
-            <View>
-              {profile.attributes.map((attr) => {
-                if (attr.key === "website") {
-                  return <A href={`${attr.value}`}>{attr.value}</A>;
-                } else if (attr.key === "twitter") {
-                  return (
-                    <A href={`https://twitter.com/${attr.value}`}>
-                      @{attr.value}
-                    </A>
-                  );
+          profile.name && (
+            <Div row mb="lg">
+              <Avatar
+                source={
+                  profile.picture
+                    ? profile.picture.__typename === "MediaSet"
+                      ? profile.picture.original.url
+                      : profile.picture.uri
+                    : undefined
                 }
-                return <Text>{attr.value}</Text>;
-              })}
-            </View>
-          </View>
+              />
+              <Div ml="lg">
+                <Text fontSize="lg" fontWeight="bold">
+                  {profile.name}
+                </Text>
+                <Text mt="md">{profile.bio}</Text>
+                <Div>
+                  {profile.attributes.map((attr) => {
+                    if (attr.key === "website") {
+                      return <A href={`${attr.value}`}>{attr.value}</A>;
+                    } else if (attr.key === "twitter") {
+                      return (
+                        <A href={`https://twitter.com/${attr.value}`}>
+                          @{attr.value}
+                        </A>
+                      );
+                    }
+                    return <Text>{attr.value}</Text>;
+                  })}
+                </Div>
+              </Div>
+            </Div>
+          )
         );
       }}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-});
