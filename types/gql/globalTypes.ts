@@ -7,14 +7,9 @@
 // START Enums and Input Objects
 //==============================================================
 
-/**
- * The follow module types
- */
-export enum FollowModules {
-  FeeFollowModule = "FeeFollowModule",
-  ProfileFollowModule = "ProfileFollowModule",
-  RevertFollowModule = "RevertFollowModule",
-  UnknownFollowModule = "UnknownFollowModule",
+export interface SingleProfileQueryRequest {
+  profileId?: any | null;
+  handle?: any | null;
 }
 
 //==============================================================
